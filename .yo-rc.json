@@ -1,0 +1,12 @@
+{
+  "generator-mitchallen-react-component": {
+    "promptValues": {
+      "scopeName": "stebogit",
+      "bitbucketUser": "",
+      "githubUser": "stebogit",
+      "cirlcleCiUser": "stebogit",
+      "codecovUser": "",
+      "npmAuthor": "Stefano Borghi"
+    }
+  }
+}
