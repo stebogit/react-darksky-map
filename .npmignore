@@ -1,9 +1,4 @@
-Gruntfile.js
-test
-coverage
-example
-examples
-support
-.env
-.gitignore
-.travis.yml
+docs
+src
+.babelrc
+webpack.config.js
