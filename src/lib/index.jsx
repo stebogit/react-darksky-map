@@ -2,8 +2,9 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 
 class DarkskyMap extends Component {
-    constructor(props) {
+    constructor (props) {
         super(props);
+
         this.availableFields = {
             temp: 'temperature',
             precip: 'precipitation_rate',
@@ -20,96 +21,64 @@ class DarkskyMap extends Component {
         };
 
         this.url = this.url.bind(this);
+        this.uom = this.uom.bind(this);
     }
 
-    // componentDidMount () {
-    //     fetch(filename).then((resp) => resp.text()).then(function (data) {
-    //         temp = data;
-    //     });
-    // }
+    shouldComponentUpdate () {
+        return false;
+    }
 
-
-    url() {
+    url () {
         const {
             lat, lng, zoom, units, fieldControl, timeControl, mapField,
         } = this.props;
+
         const field = this.availableFields[mapField];
-        let url = `https://maps.darksky.net/@${field},${lat},${lng},${zoom}?domain="+encodeURIComponent(window.location.href)+"&auth=1527719406_d7fc33ad02f802febbb1fdba99657748&amp;embed=true&amp;defaultField=${field}&amp;fieldControl=${fieldControl.toString()}&amp;timeControl=${timeControl.toString()}`;
+        if (!field) throw new Error('Invalid mapField.');
 
-        // if (fieldControl) {
-        //     url += `&fieldControl=${fieldControl.toString()}`;
-        // }
-        // if (timeControl) {
-        //     url += `&timeControl=${timeControl.toString()}`;
-        // }
+        const domain = encodeURIComponent(window.location.href);
 
-        let uom = '';
-        switch (this.props.mapField) {
-            case 'temp':
-                uom = units === 'metric' ? '_c' : '_f';
-                break;
-            case 'precip':
-                uom = units === 'metric' ? '_mmph' : '_inph';
-                break;
-            case 'feelsLike':
-                uom = units === 'metric' ? '_c' : '_f';
-                break;
-            case 'dewPoint':
-                uom = units === 'metric' ? '_c' : '_f';
-                break;
-            case 'wind':
-                uom = units === 'metric' ? '_kmph' : '_mph';
-                break;
-            case 'gust':
-                uom = units === 'metric' ? '_kmph' : '_mph';
-                break;
-            case 'pressure':
-                uom = units === 'metric' ? '_hpa' : '_inhg';
-                break;
-            case 'ozone':
-                uom = '_du';
-                break;
-            default:
-                uom = '';
-        }
-        if (uom !== '') {
-            url += `&defaultUnits=${uom}`;
-        }
-        console.log(url);
-        return url;
+        let url = `https://maps.darksky.net/@${field},${lat},${lng},${zoom}
+            ?domain=${domain}
+            &auth=1527719406_d7fc33ad02f802febbb1fdba99657748
+            &embed=true
+            &fieldControl=${fieldControl.toString()}
+            &timeControl=${timeControl.toString()}
+            &defaultField=${field}`;
+
+        let uom = this.uom(units);
+        if (uom) url += `&defaultUnits=${uom}`;
+
+        return url.replace(/\s/g, '');
     }
 
-    render() {
+    uom (units) {
+        switch (this.props.mapField) {
+        case 'temp':
+        case 'feelsLike':
+        case 'dewPoint':
+            return units === 'metric' ? '_c' : '_f';
+        case 'precip':
+            return units === 'metric' ? '_mmph' : '_inph';
+        case 'wind':
+        case 'gust':
+            return units === 'metric' ? '_kmph' : '_mph';
+        case 'pressure':
+            return units === 'metric' ? '_hpa' : '_inhg';
+        case 'ozone':
+            return '_du';
+        default:
+            return '';
+        }
+    }
+
+    render () {
         const {
-            lat, lng, zoom, units, fieldControl, timeControl, mapField, style, width, height, ...others
+            lat, lng, zoom, units, fieldControl, timeControl, mapField, onLoad, ...others
         } = this.props;
 
-        return (
-            <iframe
-                ref="iframe"
-                {...others}
-                src={this.url()}
-                frameBorder={'0'}
-                width={width}
-                height={height}
-                style={style}
-            />
-        )
+        return <iframe frameBorder="0" src={this.url()} onLoad={onLoad} {...others} />;
     }
-
-    // componentDidMount() {
-    //     let iframe = ReactDOM.findDOMNode(this.refs.iframe)
-    //     iframe.addEventListener('load', this.props.onLoad);
-    // }
-
-    // shouldComponentUpdate() {
-    //     return false;
-    // }
-
-    // componentWillUnmount() {
-    //     let iframe = ReactDOM.findDOMNode(this.refs.iframe)
-    //     iframe.removeEventListener('load', this.props.onLoad);
-    // }
 }
 
 DarkskyMap.propTypes = {
@@ -120,17 +89,17 @@ DarkskyMap.propTypes = {
     timeControl: PropTypes.bool,
     fieldControl: PropTypes.bool,
     units: PropTypes.oneOf(['metric', 'imperial']),
-    // onLoad: PropTypes.func,
+    onLoad: PropTypes.func,
 };
 
 DarkskyMap.defaultProps = {
-    zoom: 7,
+    zoom: 4,
     mapField: 'temp',
-    timeControl: false,
-    fieldControl: false,
+    timeControl: true,
+    fieldControl: true,
     units: 'metric',
     width: '100%',
-    height: '100%',
+    height: '500px',
 };
 
 export default DarkskyMap;
