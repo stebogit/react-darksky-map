@@ -1,6 +1,6 @@
 # react-darksky-map
 
-A react version of the [Darksky weather map](https://maps.darksky.net/). See [demo]().
+A react version of the [Darksky weather map](https://maps.darksky.net/). See [demo](https://stebogit.github.io/react-darksky-map/).
 
 
 <p align="left">
