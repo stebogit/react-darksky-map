@@ -5,10 +5,7 @@ import "./styles.css";
 
 function Demo() {
   return (
-    <div>
-      <h1>Demo with examples of the component</h1>
-      <MySuperCoolComponent color="brown">Wow what a button</MySuperCoolComponent>
-    </div>
+      <MySuperCoolComponent lat={47} lng={-119} zoom={11} />
   );
 }
 
