@@ -15,6 +15,8 @@ function Demo() {
             timeControl={false}
             mapField="precip"
             onLoad={onload}
+            url={window.location.href}
+            apiKey="1527719406_d7fc33ad02f802febbb1fdba99657748"
         />
     );
 }
