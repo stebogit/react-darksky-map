@@ -29,18 +29,18 @@ class DarkskyMap extends Component {
     }
 
     url () {
-        const {
-            lat, lng, zoom, units, fieldControl, timeControl, mapField,
+        let {
+            lat, lng, zoom, units, fieldControl, timeControl, mapField, url, apiKey
         } = this.props;
 
         const field = this.availableFields[mapField];
         if (!field) throw new Error('Invalid mapField.');
 
-        const domain = encodeURIComponent(window.location.href);
+        const domain = encodeURIComponent(url);
 
-        let url = `https://maps.darksky.net/@${field},${lat},${lng},${zoom}
+        url = `https://maps.darksky.net/@${field},${lat},${lng},${zoom}
             ?domain=${domain}
-            &auth=1527719406_d7fc33ad02f802febbb1fdba99657748
+            &auth=${apiKey}
             &embed=true
             &fieldControl=${fieldControl.toString()}
             &timeControl=${timeControl.toString()}
