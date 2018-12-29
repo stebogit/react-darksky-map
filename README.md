@@ -26,7 +26,7 @@ A react version of the [Darksky weather map](https://maps.darksky.net/). See [de
 
 import DarkskyMap from 'react-darksky-map';
 
-<DarkskyMap lat={47.591} lng={-122.380} zoom={4} mapField="precip" />
+<DarkskyMap lat={47.591} lng={-122.380} zoom={4} mapField="precip" url="http://example.com" apiKey="your-darksky-api-key" />
 
 ```
 
